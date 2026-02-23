@@ -85,7 +85,9 @@ Or download the zip file and extract it.
    ```
 4. Access the admin interface via the localhost link in the console.
 
-QuickBite/
+Architecture
+   ```bash
+   QuickBite/
 ├── Frontend/               # existing
 ├── Admin/                  # existing
 ├── Backend/                # existing
@@ -118,6 +120,7 @@ QuickBite/
 └── monitoring/
     └── grafana-dashboards/
         └── quickbite-dashboard.json
+   ```
 
 ### 4. Screenshots
 Here is a walkthrough of the "QuickBite" application with screenshots for key functionalities:
