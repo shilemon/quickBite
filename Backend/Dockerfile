@@ -8,10 +8,8 @@ WORKDIR /app
 # Copy package files first (better layer caching)
 COPY package*.json ./
 
-# Install all dependencies
 RUN npm ci
 
-# Copy backend source code
 COPY . .
 
 # ================================
