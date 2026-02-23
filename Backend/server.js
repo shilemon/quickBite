@@ -9,7 +9,6 @@ import orderRouter from "./routes/orderRoute.js";
 import dotenv from "dotenv";
 dotenv.config();
 
-
 // app configurations
 const app = express();
 const port = process.env.PORT || 4000;
@@ -17,7 +16,6 @@ const port = process.env.PORT || 4000;
 //middleware
 app.use(express.json()) // For parsing json files coming to backend
 app.use(cors()) // To access backend from any frontend
-
 
 // DB Connection 
 connectDB();
@@ -33,7 +31,6 @@ app.use('/api/order', orderRouter)
 app.get('/', (req, res) => {
     res.send("API Working")
 });
-
 
 // To Run on port 4000
 app.listen(port,()=>{
