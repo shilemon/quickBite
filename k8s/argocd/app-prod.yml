@@ -1,52 +1,34 @@
-# ============================================================
-# ArgoCD Application — Staging
-# Auto-syncs whenever GitHub Actions updates values-stg.yaml
-# with a new image tag (GitOps trigger)
-# ============================================================
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: quickbite-staging
+  name: quickbite-prod
   namespace: argocd
   labels:
     app: quickbite
-    env: staging
-  # Finalizer ensures ArgoCD cleans up k8s resources
-  # when this Application is deleted
+    env: production
   finalizers:
     - resources-finalizer.argocd.argoproj.io
-
 spec:
   project: default
-
-  # ── Source: GitHub repo ─────────────────────────────────────
   source:
     repoURL: https://github.com/shilemon/quickBite.git
     targetRevision: main
-    path: helm/quickbite                  # path to helm chart in repo
+    path: helm/quickbite
     helm:
       valueFiles:
-        - values.yaml                     # base values
-        - values-stg.yaml                 # staging overrides
-
-  # ── Destination: staging namespace on EKS ───────────────────
+        - values.yaml
+        - values-prod.yaml
   destination:
     server: https://kubernetes.default.svc
-    namespace: quickbite-staging
-
-  # ── Sync Policy: AUTO ────────────────────────────────────────
-  # ArgoCD auto-deploys whenever it detects a Git change
+    namespace: quickbite-prod
   syncPolicy:
-    automated:
-      prune: true        # delete k8s resources removed from Git
-      selfHeal: true     # revert any manual kubectl changes
     syncOptions:
-      - CreateNamespace=true              # auto-create namespace if missing
+      - CreateNamespace=true
       - PrunePropagationPolicy=foreground
       - RespectIgnoreDifferences=true
     retry:
-      limit: 5
+      limit: 3
       backoff:
-        duration: 5s
+        duration: 10s
         factor: 2
-        maxDuration: 3m
+        maxDuration: 5m
