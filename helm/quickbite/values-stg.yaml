@@ -23,7 +23,7 @@ admin:
 backend:
   replicaCount: 1
   image:
-    tag: latest   # backend     ← GitHub Actions auto-updates this line
+    tag: fea87e3  # backend     ← GitHub Actions auto-updates this line
   hpa:
     enabled: true
     minReplicas: 1
