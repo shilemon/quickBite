@@ -85,6 +85,40 @@ Or download the zip file and extract it.
    ```
 4. Access the admin interface via the localhost link in the console.
 
+QuickBite/
+├── Frontend/               # existing
+├── Admin/                  # existing
+├── Backend/                # existing
+├── .github/
+│   └── workflows/
+│       ├── ci-frontend.yml
+│       ├── ci-admin.yml
+│       └── ci-backend.yml
+├── docker/
+│   ├── Dockerfile.frontend
+│   ├── Dockerfile.admin
+│   └── Dockerfile.backend
+├── helm/
+│   └── quickbite/
+│       ├── Chart.yaml
+│       ├── values.yaml          # base values
+│       ├── values-stg.yaml      # staging overrides
+│       ├── values-prod.yaml     # prod overrides
+│       └── templates/
+│           ├── deployment.yaml
+│           ├── service.yaml
+│           ├── ingress.yaml
+│           ├── hpa.yaml
+│           ├── configmap.yaml
+│           └── secret.yaml
+├── k8s/
+│   └── argocd/
+│       ├── app-staging.yaml
+│       └── app-prod.yaml
+└── monitoring/
+    └── grafana-dashboards/
+        └── quickbite-dashboard.json
+
 ### 4. Screenshots
 Here is a walkthrough of the "QuickBite" application with screenshots for key functionalities:
 
@@ -113,4 +147,5 @@ Here is a walkthrough of the "QuickBite" application with screenshots for key fu
 
 - **Orders View**  
   ![Admin Orders View](Project_Screenshots/Admin_OrdersView.png)
+  
 
