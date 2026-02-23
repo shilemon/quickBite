@@ -1,0 +1,51 @@
+# ============================================================
+# ArgoCD Application — Production
+# MANUAL gate — requires human approval to sync
+# To deploy: ArgoCD UI → Sync  OR  run:
+#   argocd app sync quickbite-prod
+# ============================================================
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: quickbite-prod
+  namespace: argocd
+  labels:
+    app: quickbite
+    env: production
+  # Finalizer ensures ArgoCD cleans up k8s resources
+  # when this Application is deleted
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+
+spec:
+  project: default
+
+  # ── Source: GitHub repo ─────────────────────────────────────
+  source:
+    repoURL: https://github.com/shilemon/quickBite.git
+    targetRevision: main
+    path: helm/quickbite                  # path to helm chart in repo
+    helm:
+      valueFiles:
+        - values.yaml                     # base values
+        - values-prod.yaml                # prod overrides
+
+  # ── Destination: prod namespace on EKS ──────────────────────
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: quickbite-prod
+
+  # ── Sync Policy: MANUAL ──────────────────────────────────────
+  # No 'automated' block = manual sync required
+  # Human must review staging first, then approve prod sync
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true              # auto-create namespace if missing
+      - PrunePropagationPolicy=foreground
+      - RespectIgnoreDifferences=true
+    retry:
+      limit: 3
+      backoff:
+        duration: 10s
+        factor: 2
+        maxDuration: 5m
