@@ -16,7 +16,7 @@ frontend:
 admin:
   replicaCount: 1
   image:
-    tag: latest   # admin       ← GitHub Actions auto-updates this line
+    tag: 7c15a66  # admin       ← GitHub Actions auto-updates this line
   hpa:
     enabled: false
 
