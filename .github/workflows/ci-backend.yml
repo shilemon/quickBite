@@ -44,8 +44,8 @@ jobs:
       - name: Build Docker image
         uses: docker/build-push-action@v5
         with:
-          context: .
-          file: docker/Dockerfile.backend
+          context: ./Backend          # ← context is the Backend folder
+          file: ./Backend/Dockerfile  # ← Dockerfile inside Backend/
           push: false
           tags: ${{ env.IMAGE_NAME }}:${{ steps.tag.outputs.IMAGE_TAG }}
           cache-from: type=gha
@@ -68,8 +68,8 @@ jobs:
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         uses: docker/build-push-action@v5
         with:
-          context: .
-          file: docker/Dockerfile.backend
+          context: ./Backend
+          file: ./Backend/Dockerfile
           push: true
           tags: |
             ${{ env.IMAGE_NAME }}:${{ steps.tag.outputs.IMAGE_TAG }}

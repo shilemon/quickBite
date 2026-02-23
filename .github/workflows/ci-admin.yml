@@ -1,22 +1,22 @@
-name: CI - Frontend
+name: CI - Admin
 
 on:
   push:
     branches: [main]
     paths:
-      - "Frontend/**"
-      - ".github/workflows/ci-frontend.yml"
+      - "Admin/**"
+      - ".github/workflows/ci-admin.yml"
   pull_request:
     branches: [main]
     paths:
-      - "Frontend/**"
+      - "Admin/**"
 
 env:
-  IMAGE_NAME: emon110852/quickbite-frontend
+  IMAGE_NAME: emon110852/quickbite-admin
 
 jobs:
   build-and-push:
-    name: Build, Scan & Push Frontend
+    name: Build, Scan & Push Admin
     runs-on: ubuntu-latest
 
     steps:
@@ -41,12 +41,11 @@ jobs:
         uses: docker/setup-buildx-action@v3
 
       # ── 5. Build Docker image ────────────────────────────────
-      #     Pass VITE_API_URL as build arg so React knows the backend URL
       - name: Build Docker image
         uses: docker/build-push-action@v5
         with:
-          context: ./Frontend          # ← context is the Frontend folder
-          file: ./Frontend/Dockerfile  # ← Dockerfile inside Frontend/
+          context: ./Admin          # ← context is the Admin folder
+          file: ./Admin/Dockerfile  # ← Dockerfile inside Admin/
           push: false
           load: true
           tags: ${{ env.IMAGE_NAME }}:${{ steps.tag.outputs.IMAGE_TAG }}
@@ -71,8 +70,8 @@ jobs:
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         uses: docker/build-push-action@v5
         with:
-          context: ./Frontend
-          file: ./Frontend/Dockerfile
+          context: ./Admin
+          file: ./Admin/Dockerfile
           push: true
           tags: |
             ${{ env.IMAGE_NAME }}:${{ steps.tag.outputs.IMAGE_TAG }}
@@ -88,9 +87,9 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          sed -i "s|tag: .*  # frontend|tag: ${{ steps.tag.outputs.IMAGE_TAG }}  # frontend|" helm/quickbite/values-stg.yaml
+          sed -i "s|tag: .*  # admin|tag: ${{ steps.tag.outputs.IMAGE_TAG }}  # admin|" helm/quickbite/values-stg.yaml
           git add helm/quickbite/values-stg.yaml
-          git commit -m "ci: update frontend image tag to ${{ steps.tag.outputs.IMAGE_TAG }} [skip ci]"
+          git commit -m "ci: update admin image tag to ${{ steps.tag.outputs.IMAGE_TAG }} [skip ci]"
           git push
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -98,6 +97,6 @@ jobs:
       # ── 9. Summary ───────────────────────────────────────────
       - name: Job Summary
         run: |
-          echo "## ✅ Frontend CI Complete" >> $GITHUB_STEP_SUMMARY
+          echo "## ✅ Admin CI Complete" >> $GITHUB_STEP_SUMMARY
           echo "- **Image**: \`${{ env.IMAGE_NAME }}:${{ steps.tag.outputs.IMAGE_TAG }}\`" >> $GITHUB_STEP_SUMMARY
           echo "- **Trivy Scan**: Passed" >> $GITHUB_STEP_SUMMARY

@@ -5,14 +5,14 @@ FROM node:20-alpine AS builder
 
 WORKDIR /app
 
-# Copy package files first for better layer caching
-COPY Backend/package*.json ./
+# Copy package files first (better layer caching)
+COPY package*.json ./
 
-# Install all dependencies (including devDependencies for build)
+# Install all dependencies
 RUN npm ci
 
 # Copy backend source code
-COPY Backend/ .
+COPY . .
 
 # ================================
 # Stage 2: Production Runtime
@@ -26,12 +26,12 @@ RUN addgroup -g 1001 -S nodejs && \
 WORKDIR /app
 
 # Copy package files
-COPY Backend/package*.json ./
+COPY package*.json ./
 
 # Install only production dependencies
 RUN npm ci --only=production && npm cache clean --force
 
-# Copy built app from builder stage
+# Copy app from builder stage
 COPY --from=builder --chown=nodejs:nodejs /app .
 
 # Use non-root user
