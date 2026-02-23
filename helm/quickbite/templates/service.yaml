@@ -1,0 +1,90 @@
+# ============================================================
+# Services — Frontend, Admin, Backend, MongoDB
+# All ClusterIP — external traffic enters only via Ingress
+# ============================================================
+
+# ── Frontend Service ─────────────────────────────────────────
+{{- if .Values.frontend.enabled }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-frontend
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ .Release.Name }}-frontend
+spec:
+  type: {{ .Values.frontend.service.type }}
+  selector:
+    app: {{ .Release.Name }}-frontend
+  ports:
+    - name: http
+      port: {{ .Values.frontend.service.port }}
+      targetPort: {{ .Values.frontend.service.targetPort }}
+      protocol: TCP
+{{- end }}
+
+# ── Admin Service ────────────────────────────────────────────
+{{- if .Values.admin.enabled }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-admin
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ .Release.Name }}-admin
+spec:
+  type: {{ .Values.admin.service.type }}
+  selector:
+    app: {{ .Release.Name }}-admin
+  ports:
+    - name: http
+      port: {{ .Values.admin.service.port }}
+      targetPort: {{ .Values.admin.service.targetPort }}
+      protocol: TCP
+{{- end }}
+
+# ── Backend Service ──────────────────────────────────────────
+{{- if .Values.backend.enabled }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-backend
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ .Release.Name }}-backend
+spec:
+  type: {{ .Values.backend.service.type }}
+  selector:
+    app: {{ .Release.Name }}-backend
+  ports:
+    - name: http
+      port: {{ .Values.backend.service.port }}
+      targetPort: {{ .Values.backend.service.targetPort }}
+      protocol: TCP
+{{- end }}
+
+# ── MongoDB Service ──────────────────────────────────────────
+# Headless-compatible ClusterIP for StatefulSet DNS resolution
+# Internal DNS: quickbite-mongodb.quickbite-staging.svc.cluster.local
+{{- if .Values.mongodb.enabled }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-mongodb
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ .Release.Name }}-mongodb
+spec:
+  type: ClusterIP
+  selector:
+    app: {{ .Release.Name }}-mongodb
+  ports:
+    - name: mongo
+      port: {{ .Values.mongodb.service.port }}
+      targetPort: 27017
+      protocol: TCP
+{{- end }}

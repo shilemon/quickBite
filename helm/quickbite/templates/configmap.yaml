@@ -1,0 +1,23 @@
+# ============================================================
+# ConfigMap — Non-sensitive environment variables
+# Sensitive vars (MONGO_URI, JWT, STRIPE) go in secret.yaml
+# ============================================================
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-config
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ .Release.Name }}
+data:
+  # Backend app config
+  NODE_ENV: {{ .Values.config.nodeEnv | quote }}
+  PORT: {{ .Values.config.port | quote }}
+
+  # MongoDB internal connection string
+  # Uses K8s service DNS: <release>-mongodb.<namespace>.svc.cluster.local
+  MONGO_URI: "mongodb://{{ .Release.Name }}-mongodb:{{ .Values.mongodb.service.port }}/{{ .Values.mongodb.dbName }}"
+
+  # Frontend/Admin API base URL hint (for reference)
+  # Actual VITE_API_URL is baked in at Docker build time via CI build-arg
+  API_BASE_PATH: "/api"

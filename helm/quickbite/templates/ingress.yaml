@@ -1,0 +1,53 @@
+# ============================================================
+# Ingress — Path-based routing via NGINX Ingress Controller
+#
+# URLs (using AWS NLB DNS — no domain needed):
+#   http://<nginx-lb-dns>/         → Frontend (React user app)
+#   http://<nginx-lb-dns>/admin    → Admin Panel (React admin)
+#   http://<nginx-lb-dns>/api      → Backend API (Express)
+# ============================================================
+
+{{- if .Values.ingress.enabled }}
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ .Release.Name }}-ingress
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ .Release.Name }}
+  annotations:
+    {{- toYaml .Values.ingress.annotations | nindent 4 }}
+spec:
+  ingressClassName: {{ .Values.ingress.className }}
+  rules:
+    - http:
+        paths:
+          # ── Backend API (/api) ────────────────────────────
+          # Must be defined BEFORE the frontend catch-all (/)
+          - path: /api(/|$)(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: {{ .Release.Name }}-backend
+                port:
+                  number: {{ .Values.backend.service.port }}
+
+          # ── Admin Panel (/admin) ──────────────────────────
+          - path: /admin(/|$)(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: {{ .Release.Name }}-admin
+                port:
+                  number: {{ .Values.admin.service.port }}
+
+          # ── Frontend (/) catch-all ────────────────────────
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ .Release.Name }}-frontend
+                port:
+                  number: {{ .Values.frontend.service.port }}
+{{- end }}

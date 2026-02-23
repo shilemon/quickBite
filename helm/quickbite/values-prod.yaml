@@ -1,0 +1,43 @@
+# ============================================================
+# QuickBite — Production Environment Overrides
+# ArgoCD requires MANUAL approval to sync prod
+# ============================================================
+
+frontend:
+  replicaCount: 2
+  image:
+    tag: latest   # frontend    ← manually bumped for prod promotion
+  hpa:
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 5
+    targetCPUUtilizationPercentage: 70
+
+admin:
+  replicaCount: 2
+  image:
+    tag: latest   # admin
+  hpa:
+    enabled: true
+    minReplicas: 1
+    maxReplicas: 3
+    targetCPUUtilizationPercentage: 70
+
+backend:
+  replicaCount: 3
+  image:
+    tag: latest   # backend
+  hpa:
+    enabled: true
+    minReplicas: 3
+    maxReplicas: 8
+    targetCPUUtilizationPercentage: 70
+
+mongodb:
+  storage:
+    size: 10Gi
+    storageClass: gp2
+
+config:
+  nodeEnv: "production"
+  port: "4000"

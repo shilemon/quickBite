@@ -1,0 +1,40 @@
+# ============================================================
+# QuickBite — Staging Environment Overrides
+# ArgoCD auto-syncs when image tags are updated here by CI
+# ============================================================
+
+frontend:
+  replicaCount: 1
+  image:
+    tag: latest   # frontend    ← GitHub Actions auto-updates this line
+  hpa:
+    enabled: true
+    minReplicas: 1
+    maxReplicas: 2
+    targetCPUUtilizationPercentage: 70
+
+admin:
+  replicaCount: 1
+  image:
+    tag: latest   # admin       ← GitHub Actions auto-updates this line
+  hpa:
+    enabled: false
+
+backend:
+  replicaCount: 1
+  image:
+    tag: latest   # backend     ← GitHub Actions auto-updates this line
+  hpa:
+    enabled: true
+    minReplicas: 1
+    maxReplicas: 3
+    targetCPUUtilizationPercentage: 70
+
+mongodb:
+  storage:
+    size: 2Gi
+    storageClass: gp2
+
+config:
+  nodeEnv: "staging"
+  port: "4000"

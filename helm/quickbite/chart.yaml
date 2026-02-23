@@ -1,0 +1,14 @@
+apiVersion: v2
+name: quickbite
+description: QuickBite Food Management System - Production Helm Chart
+type: application
+version: 1.0.0
+appVersion: "1.0.0"
+maintainers:
+  - name: emon110852
+keywords:
+  - quickbite
+  - food
+  - nodejs
+  - react
+  - mongodb
