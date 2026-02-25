@@ -29,6 +29,7 @@ jobs:
         id: tag
         run: |
           
+          SHA=$(echo $GITHUB_SHA | cut -c1-7)
           echo "IMAGE_TAG=sha-${SHA}" >> $GITHUB_OUTPUT
 
       # ── 3. Login to Docker Hub ───────────────────────────────
