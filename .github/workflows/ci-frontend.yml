@@ -27,7 +27,10 @@ jobs:
       # ── 2. Set image tag ─────────────────────────────────────
       - name: Set image tag
         id: tag
-        run: echo "IMAGE_TAG=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+        run: |
+          # Force string format to prevent scientific notation
+          SHA=$(git rev-parse --short HEAD)
+          echo "IMAGE_TAG=sha-${SHA}" >> $GITHUB_OUTPUT
 
       # ── 3. Login to Docker Hub ───────────────────────────────
       - name: Login to Docker Hub
