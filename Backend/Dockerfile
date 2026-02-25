@@ -1,18 +1,15 @@
-# ================================
 # Stage 1: Builder
 # ================================
 FROM node:20-alpine AS builder
 
 WORKDIR /app
 
-# Copy package files first (better layer caching)
 COPY package*.json ./
 
 RUN npm ci
 
 COPY . .
 
-# ================================
 # Stage 2: Production Runtime
 # ================================
 FROM node:20-alpine AS runner
