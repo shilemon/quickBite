@@ -89,12 +89,18 @@ jobs:
       - name: Update Helm values with new image tag
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          sed -i "s|tag: .*  # frontend|tag: ${{ steps.tag.outputs.IMAGE_TAG }}  # frontend|" helm/quickbite/values-stg.yaml
-          git add helm/quickbite/values-stg.yaml
-          git commit -m "ci: update frontend image tag to ${{ steps.tag.outputs.IMAGE_TAG }} [skip ci]"
-          git push
+           git config user.name "github-actions[bot]"
+           git config user.email "github-actions[bot]@users.noreply.github.com"
+           for i in 1 2 3 4 5; do
+             git pull origin main --rebase --autostash
+             sed -i "s|tag: .*  # frontend|tag: ${{ steps.tag.outputs.IMAGE_TAG }}  # frontend|" helm/quickbite/values-stg.yaml
+             git add helm/quickbite/values-stg.yaml
+             git diff --staged --quiet && echo "No changes" && exit 0
+             git commit -m "ci: update frontend image tag to ${{ steps.tag.outputs.IMAGE_TAG }} [skip ci]"
+             git push && exit 0
+             sleep 10
+           done
+           exit 1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
