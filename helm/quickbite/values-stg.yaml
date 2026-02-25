@@ -6,7 +6,7 @@
 frontend:
   replicaCount: 1
   image:
-    tag: 4a6900a  # frontend    ← GitHub Actions auto-updates this line
+    tag: 611e627  # frontend    ← GitHub Actions auto-updates this line
   hpa:
     enabled: true
     minReplicas: 1
