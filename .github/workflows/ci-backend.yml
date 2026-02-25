@@ -28,9 +28,8 @@ jobs:
       - name: Set image tag
         id: tag
         run: |
-          # Force string format to prevent scientific notation
-          SHA=$(git rev-parse --short HEAD)
-          echo "IMAGE_TAG=sha-${SHA}" >> $GITHUB_OUTPUT
+          
+          echo "IMAGE_TAG=sha-${SHA}" >> $GITHUB_OUTPUTs
 
       # ── 3. Login to Docker Hub ───────────────────────────────
       - name: Login to Docker Hub
