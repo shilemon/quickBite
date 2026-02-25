@@ -9,7 +9,6 @@ import LoginPopUp from './components/Login/LoginPopUp'
 import Verify from './Pages/Verify/Verify'
 import MyOrders from './Pages/Orders/MyOrders'
 
-
 const App = () => {
   const [showLogin,setShowLogin] = useState(false)
   return (
@@ -29,5 +28,6 @@ const App = () => {
     </>
   );
 }
+
 
 export default App
