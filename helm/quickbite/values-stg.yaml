@@ -23,7 +23,7 @@ admin:
 backend:
   replicaCount: 1
   image:
-    tag: 8962fee  # backend     ← GitHub Actions auto-updates this line
+    tag: sha-  # backend     ← GitHub Actions auto-updates this line
   hpa:
     enabled: true
     minReplicas: 1
