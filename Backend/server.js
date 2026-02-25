@@ -11,17 +11,20 @@ dotenv.config();
 // app configurations
 const app = express();
 const port = process.env.PORT || 4000;
+
 //middleware
 app.use(express.json())
 app.use(cors())
 // DB Connection
 connectDB();
+
 // API Endpoint
 app.use("/api/food",foodRouter)
 app.use("/images",express.static('uploads'))
 app.use("/api/user",userRouter)
 app.use('/api/cart', cartRouter)
 app.use('/api/order', orderRouter)
+
 // Http Requests
 app.get('/health', (req, res) => {
     res.status(200).json({ status: 'ok' })
@@ -33,5 +36,3 @@ app.get('/', (req, res) => {
 app.listen(port,()=>{
     console.log(`Server Running on http://localhost:${port}`)
 })
-
-
