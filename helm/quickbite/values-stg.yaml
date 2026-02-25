@@ -33,7 +33,7 @@ backend:
 mongodb:
   storage:
     size: 2Gi
-    storageClass: gp2
+    storageClass: gp2-immediate
 
 config:
   nodeEnv: "staging"
