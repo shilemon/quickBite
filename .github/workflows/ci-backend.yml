@@ -80,20 +80,20 @@ jobs:
           cache-to: type=gha,mode=max
 
       # ── 8. Update Helm values (GitOps trigger) ───────────────
-      - name: Update Helm values with new image tag
+      - name: Update Helm values in GitHub
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          # Update staging values
-          sed -i "s|tag: .*  # backend|tag: ${{ steps.tag.outputs.IMAGE_TAG }}  # backend|" helm/quickbite/values-stg.yaml
+            sed -i "s|tag: .*  # backend|tag: ${{ steps.tag.outputs.IMAGE_TAG }}  # backend|" helm/quickbite/values-stg.yaml
 
-          git add helm/quickbite/values-stg.yaml
-          git commit -m "ci: update backend image tag to ${{ steps.tag.outputs.IMAGE_TAG }} [skip ci]"
-          git push
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            git add helm/quickbite/values-stg.yaml
+            git diff --cached --quiet || git commit -m "ci: update backend image tag to ${{ steps.tag.outputs.IMAGE_TAG }} [skip ci]"
+            git push
+
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       # ── 9. Summary ───────────────────────────────────────────
       - name: Job Summary
