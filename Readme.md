@@ -150,5 +150,10 @@ Here is a walkthrough of the "QuickBite" application with screenshots for key fu
 
 - **Orders View**  
   ![Admin Orders View](Project_Screenshots/Admin_OrdersView.png)
-  
+
+  ![1772188651829](https://github.com/user-attachments/assets/6e55d22a-d5c9-4e42-9ecd-3f7a54981fae)
+
+  ![1772188652807](https://github.com/user-attachments/assets/aedeba84-05af-4125-895d-1959e3087f23)
+
+
 
